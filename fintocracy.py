@@ -217,7 +217,7 @@ def generate_questions():
         "api_key": os.getenv('GROQ_API_KEY'),
         "system_prompt": "Generate multiple-choice questions about financial literacy in Portuguese of Portugal, including budgeting, investments, retirement planning, and debt management.",
         "sample_question": "What is a budget?",
-        "input_data": "This section should cover basic concepts of personal finance.",
+        "input_data": "Basic concepts of personal finance, such as budgeting, managing debts, planning retirement, and making investments.",
         "output_file": "qa_output.txt",
         "model": "llama-3.1-70b-versatile",
         "chunk_size": 512,
@@ -225,12 +225,13 @@ def generate_questions():
         "temperature": 0.1,
         "max_tokens": 1024
     }
+
     
     # Generate QA pairs using the configured model
     train_dataset, test_dataset = groq_qa.generate(custom_config)
     
     # Load the generated questions
-    with open('qa_output.txt', 'r') as f:
+    with open(custom_config['output_file'], 'r') as f:
         questions = f.readlines()
 
 # Load the Groq-generated questions
