@@ -234,6 +234,7 @@ def generate_questions():
 
 # Load the Groq-generated questions
 def load_generated_questions():
+    generate_questions()
     with open('qa_output.txt', 'r') as file:
         generated_questions = file.readlines()
     return generated_questions
@@ -275,7 +276,6 @@ def main():
     
     # Navegação entre os diferentes módulos
     if escolha == "Quiz Financeiro":
-        generate_questions()
         quiz_interativo(nivel_atual)
     elif escolha == "Quiz Finceiro Intel":
         quiz_interativo_with_groq(nivel_atual)
