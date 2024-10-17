@@ -221,7 +221,8 @@ def generate_questions():
 
     custom_config = {
         "api_key": api_key,  # Use your Groq API key
-        "system_prompt": "Generate multiple-choice questions about financial literacy...",
+        "system_prompt": "Generate multiple-choice questions about financial literacy in Portuguese of Portugal, including budgeting, investments, retirement planning, and debt management.",
+        "sample_question": "What is a budget?",
         "model": "llama-3.1-70b-versatile",
         "chunk_size": 512,
         "tokens_per_question": 60,
@@ -230,13 +231,13 @@ def generate_questions():
         "questions": 10  # Number of questions to generate dynamically
     }
     
-    # Generate QA pairs using the configured model
     try:
-        return groq_qa.generate(custom_config)
+        train_dataset, test_dataset = groq_qa.generate(custom_config)
     except Exception as e:
-        st.error(f"Error generating questions: {str(e)}")
+        st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
+        st.error(f"Detalhes do erro: {str(e)}")
         return []
-
+        
 # Function to display the dynamically generated questions
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
