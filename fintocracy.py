@@ -212,7 +212,7 @@ def quiz_interativo(nivel_atual):
 
 
 # Function to generate questions dynamically using Groq API
-def generate_questions():
+def generate_questions2():
     api_key = os.getenv('GROQ_API_KEY')
     
     if not api_key:
@@ -237,6 +237,49 @@ def generate_questions():
         st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
         st.error(f"Detalhes do erro: {str(e)}")
         return []
+
+
+
+# Use Groq client
+def generate_questions():
+    # Configure your Groq model name
+    GROQ_LLAMA_MODEL_FULLNAME = "llama-3.1-70b-versatile"
+    markdown_content = """
+    # Financial Literacy
+    
+    Financial literacy is the ability to understand and effectively use various financial skills, including personal financial management, budgeting, and investing.
+    """
+    api_key = os.environ.get("GROQ_API_KEY")
+
+    if not api_key:
+        raise ValueError("API key não encontrada. Certifique-se de que a variável de ambiente GROQ_API_KEY está definida.")
+
+    client = Groq(api_key=api_key)
+    
+    prompt_pagination = (
+        "Generate multiple-choice questions about financial literacy, "
+        "with the following content as a reference: \n\n"
+        f"{markdown_content}\n"
+        "Please provide 10 questions along with their options and the correct answers."
+    )
+    
+    try:
+        response = client.chat.completions.create(
+            model=GROQ_LLAMA_MODEL_FULLNAME,
+            messages=[
+                {"role": "system", "content": prompt_pagination},
+                {"role": "user", "content": markdown_content},
+            ],
+        )
+        
+        response_content = response.choices[0].message.content.strip()
+        return response_content  # Return the generated questions
+    
+    except Exception as e:
+        print("Erro ao gerar perguntas:", str(e))
+        return "Não foi possível gerar perguntas no momento. Tente novamente mais tarde."
+
+
         
 # Function to display the dynamically generated questions
 def quiz_interativo_with_groq(nivel_atual):
