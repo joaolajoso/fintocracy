@@ -2,4 +2,4 @@ streamlit
 yfinance
 datetime
 groq
-groq-qa-generator
+groq_qa
