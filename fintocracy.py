@@ -217,7 +217,7 @@ def generate_questions():
         "api_key": os.getenv('GROQ_API_KEY'),
         "system_prompt": "Generate multiple-choice questions about financial literacy in Portuguese of Portugal, including budgeting, investments, retirement planning, and debt management.",
         "sample_question": "What is a budget?",
-        "input_data": "Basic concepts of personal finance, such as budgeting, managing debts, planning retirement, and making investments.",
+        "input_data": "go.txt",
         "output_file": "qa_output.txt",
         "model": "llama-3.1-70b-versatile",
         "chunk_size": 512,
