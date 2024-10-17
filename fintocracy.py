@@ -223,7 +223,7 @@ def generate_questions():
         "chunk_size": 512,
         "tokens_per_question": 60,
         "temperature": 0.1,
-        "max_tokens": 1024
+        "max_tokens": 1024,
         "questions": 10
     }
 
