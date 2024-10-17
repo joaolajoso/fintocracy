@@ -295,7 +295,16 @@ def quiz_interativo_with_groq(nivel_atual):
     
     # Iterate through the generated questions and display them
     for question_data in questions:
+        # Print the question_data to debug
+        st.write(f"Question Data: {question_data}")  # Debug line
+
         parts = question_data.split("|")
+        
+        # Check if parts has the expected length
+        if len(parts) < 2:
+            st.error(f"Formato inválido para a pergunta: {question_data}")
+            continue  # Skip to the next iteration if the format is incorrect
+        
         pergunta = parts[0]
         opcoes = parts[1].split(",")
         
@@ -304,6 +313,7 @@ def quiz_interativo_with_groq(nivel_atual):
     if st.button("Submeter Respostas"):
         st.success("Quiz submetido com sucesso!")
         # Handle response checking and level progression here
+
 
 # Main function for app
 def main():
