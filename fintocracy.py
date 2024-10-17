@@ -2,6 +2,8 @@
 import streamlit as st
 import yfinance as yf
 import datetime as dt
+from groq_qa_generator import groq_qa
+
 
 # Função para simular o retorno de um investimento em ações
 def simulacao_investimento_acao(ticker, valor_investido, data_inicial, data_final):
@@ -207,6 +209,54 @@ def quiz_interativo(nivel_atual):
         st.balloons()
         st.success(f"Você subiu para o Nível {novo_nivel}!")
 
+
+def generate_questions():
+    # Configuration for QA generation
+    custom_config = {
+        "api_key": os.getenv('GROQ_API_KEY'),
+        "system_prompt": "Generate multiple-choice questions about financial literacy in Portuguese of Portugal, including budgeting, investments, retirement planning, and debt management.",
+        "sample_question": "What is a budget?",
+        "input_data": "This section should cover basic concepts of personal finance.",
+        "output_file": "qa_output.txt",
+        "model": "llama-3.1-70b-versatile",
+        "chunk_size": 512,
+        "tokens_per_question": 60,
+        "temperature": 0.1,
+        "max_tokens": 1024
+    }
+    
+    # Generate QA pairs using the configured model
+    train_dataset, test_dataset = groq_qa.generate(custom_config)
+    
+    # Load the generated questions
+    with open('qa_output.txt', 'r') as f:
+        questions = f.readlines()
+
+# Load the Groq-generated questions
+def load_generated_questions():
+    with open('qa_output.txt', 'r') as file:
+        generated_questions = file.readlines()
+    return generated_questions
+
+# Function to update the quiz to include Groq-generated questions
+def quiz_interativo_with_groq(nivel_atual):
+    st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
+    
+    # Load generated questions from Groq
+    generated_questions = load_generated_questions()
+    
+    # Display each generated question
+    for question in generated_questions:
+        parts = question.split("|")
+        pergunta = parts[0]
+        opcoes = parts[1].split(",")
+        
+        resposta = st.radio(pergunta, opcoes)
+    
+    if st.button("Submeter Respostas"):
+        st.success("Quiz submetido com sucesso!")
+        # Handle response checking and level progression here
+
 # Função principal da aplicação (mantida igual)
 def main():
     st.title("Plataforma Gamificada de Educação Financeira")
@@ -220,19 +270,19 @@ def main():
     mostrar_nivel_topo(nivel_atual)
     
     # Menu de navegação
-    menu = ["Quiz Financeiro", "Progresso e Recompensas", "Simulações de Finanças"]
+    menu = ["Quiz Financeiro", "Quiz Finceiro Intel", "Progresso e Recompensas", "Simulações de Finanças"]
     escolha = st.sidebar.selectbox("Selecione uma Opção", menu)
     
     # Navegação entre os diferentes módulos
     if escolha == "Quiz Financeiro":
+        generate_questions()
         quiz_interativo(nivel_atual)
+    elif escolha == "Quiz Finceiro Intel":
+        quiz_interativo_with_groq(nivel_atual)
     elif escolha == "Progresso e Recompensas":
         progresso_e_recompensas()
     elif escolha == "Simulações de Finanças":
         simulacoes_complexas()
-        
-if __name__ == '__main__':
-    main()
         
 if __name__ == '__main__':
     main()
