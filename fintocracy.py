@@ -213,34 +213,6 @@ def quiz_interativo(nivel_atual):
 
 
 # Function to generate questions dynamically using Groq API
-def generate_questions2():
-    api_key = os.getenv('GROQ_API_KEY')
-    
-    if not api_key:
-        st.error("API key not found. Please set the GROQ_API_KEY environment variable.")
-        return []
-
-    custom_config = {
-        "api_key": api_key,  # Use your Groq API key
-        "system_prompt": "Generate multiple-choice questions about financial literacy in Portuguese of Portugal, including budgeting, investments, retirement planning, and debt management.",
-        "sample_question": "What is a budget?",
-        "model": "llama-3.1-70b-versatile",
-        "chunk_size": 512,
-        "tokens_per_question": 60,
-        "temperature": 0.1,
-        "max_tokens": 1024,
-        "questions": 10  # Number of questions to generate dynamically
-    }
-    train_dataset, test_dataset = groq_qa.generate(custom_config)
-    try:
-        train_dataset, test_dataset = groq_qa.generate(custom_config)
-    except Exception as e:
-        st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
-        st.error(f"Detalhes do erro: {str(e)}")
-        return []
-
-
-
 # Use Groq client
 def generate_questions():
     # Configure your Groq model name
@@ -261,7 +233,8 @@ def generate_questions():
         "Generate multiple-choice questions about financial literacy, "
         "with the following content as a reference: \n\n"
         f"{markdown_content}\n"
-        "Please provide 10 questions along with their options and the correct answers."
+        "Please provide 10 questions along with their options and the correct answers, "
+        "formatted as: 'Question | Option1, Option2, Option3, CorrectOption'."
     )
     
     try:
@@ -274,11 +247,24 @@ def generate_questions():
         )
         
         response_content = response.choices[0].message.content.strip()
-        return response_content  # Return the generated questions
+
+        # Split the response into lines and validate
+        questions = response_content.split("\n")
+        formatted_questions = []
+
+        for question in questions:
+            if "|" in question:
+                # Sanitize the output to avoid empty entries
+                formatted_question = question.strip()
+                if formatted_question:  # Only add non-empty lines
+                    formatted_questions.append(formatted_question)
+        
+        return formatted_questions  # Return the formatted questions
     
     except Exception as e:
         print("Erro ao gerar perguntas:", str(e))
         return "Não foi possível gerar perguntas no momento. Tente novamente mais tarde."
+
 
 
         
