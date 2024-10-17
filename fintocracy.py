@@ -20,8 +20,8 @@ def simulacao_investimento_acao(ticker, valor_investido, data_inicial, data_fina
     else:
         return None, None
 
-# Função para simular o planejamento de aposentadoria
-def simulacao_aposentadoria(valor_atual, contribuicao_mensal, anos, taxa_rendimento):
+# Função para simular o planejamento de Reforma
+def simulacao_Reforma(valor_atual, contribuicao_mensal, anos, taxa_rendimento):
     meses = anos * 12
     saldo_final = valor_atual
     for i in range(meses):
@@ -43,7 +43,7 @@ def simulacao_divida(valor_divida, taxa_juros, pagamento_mensal):
 
 # Função principal para simulações complexas
 def simulacoes_complexas():
-    st.header("Simulações Complexas de Investimento, Aposentadoria e Dívidas")
+    st.header("Simulações Complexas de Investimento, Reforma e Dívidas")
 
     # Simulação de Investimento em Ações
     st.subheader("Simulação de Investimento em Ações")
@@ -59,15 +59,15 @@ def simulacoes_complexas():
         else:
             st.error("Dados da ação não disponíveis. Tente outro ticker ou intervalo de datas.")
 
-    # Simulação de Planejamento de Aposentadoria
-    st.subheader("Simulação de Planejamento de Aposentadoria")
+    # Simulação de Planejamento de Reforma
+    st.subheader("Simulação de Planejamento de Reforma")
     valor_atual = st.number_input("Quanto você já tem poupado? (em euros)", min_value=0.0, step=100.0)
     contribuicao_mensal = st.number_input("Quanto você pode contribuir por mês? (em euros)", min_value=0.0, step=50.0)
-    anos = st.slider("Quantos anos até a aposentadoria?", min_value=1, max_value=50)
+    anos = st.slider("Quantos anos até a Reforma?", min_value=1, max_value=50)
     taxa_rendimento = st.slider("Taxa de rendimento anual esperada (%)", min_value=0.0, max_value=15.0, step=0.1)
 
-    if st.button("Simular Aposentadoria"):
-        saldo_final = simulacao_aposentadoria(valor_atual, contribuicao_mensal, anos, taxa_rendimento)
+    if st.button("Simular Reforma"):
+        saldo_final = simulacao_Reforma(valor_atual, contribuicao_mensal, anos, taxa_rendimento)
         st.success(f"Após {anos} anos, você terá acumulado {saldo_final:.2f} euros.")
 
     # Simulação de Gestão de Dívidas
@@ -82,7 +82,8 @@ def simulacoes_complexas():
             st.success(f"Você pagará sua dívida em {meses} meses.")
         else:
             st.error("Com este pagamento mensal, a dívida não será quitada. Tente aumentar o valor do pagamento.")
- Função para calcular feedback financeiro com base em uma simulação
+            
+#Função para calcular feedback financeiro com base em uma simulação
 def calcular_feedback(acao, valor):
     if acao == 'Investir':
         retorno = valor * 1.1  # Simulação simples de 10% de retorno
