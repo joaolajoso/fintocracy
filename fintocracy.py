@@ -114,19 +114,44 @@ def simulacao_orcamento():
         st.success(feedback)
         st.write(f"Seu saldo atual: {saldo} euros")
 
-# Função de quiz interativo
-def quiz_interativo():
+# Função para atualizar o nível do usuário com base na pontuação
+def atualizar_nivel(pontuacao):
+    if pontuacao <= 1:
+        return 1  # Nível 1 - Iniciante
+    elif pontuacao == 2:
+        return 2  # Nível 2 - Aprendiz
+    elif pontuacao == 3:
+        return 3  # Nível 3 - Intermediário
+    elif pontuacao == 4:
+        return 4  # Nível 4 - Avançado
+    else:
+        return 5  # Nível 5 - Expert
+
+# Função para exibir o nível atual no topo de todas as páginas
+def mostrar_nivel_topo(nivel_atual):
+    st.markdown(f"### Seu nível atual: **Nível {nivel_atual}**")
+
+# Função de quiz interativo com níveis
+def quiz_interativo(nivel_atual):
     st.header("Quiz de Educação Financeira")
-    st.write("Responda as perguntas para testar seu conhecimento sobre finanças pessoais.")
+    st.write("Responda as perguntas para testar seu conhecimento e subir de nível.")
 
     # Perguntas do quiz
     perguntas = {
         "O que é um orçamento?": ["Plano para gastar dinheiro", "Ferramenta de investimento", "Uma poupança"],
         "Qual é a melhor maneira de evitar dívidas?": ["Gastar mais do que ganha", "Poupar dinheiro", "Fazer empréstimos"],
-        "Qual das seguintes opções é considerada um bom investimento?": ["Jogo de azar", "Ações", "Compras impulsivas"]
+        "Qual das seguintes opções é considerada um bom investimento?": ["Jogo de azar", "Ações", "Compras impulsivas"],
+        "O que é um fundo de emergência?": ["Dinheiro para emergências", "Dinheiro para gastar em férias", "Investimento em ações"],
+        "Qual é a principal função de um cartão de crédito?": ["Gastar sem limites", "Fazer compras e pagar depois", "Aumentar o saldo bancário"]
     }
     
-    respostas_corretas = ["Plano para gastar dinheiro", "Poupar dinheiro", "Ações"]
+    respostas_corretas = [
+        "Plano para gastar dinheiro", 
+        "Poupar dinheiro", 
+        "Ações", 
+        "Dinheiro para emergências", 
+        "Fazer compras e pagar depois"
+    ]
     
     # Coletar respostas do usuário
     pontuacao = 0
@@ -135,55 +160,69 @@ def quiz_interativo():
         if resposta == respostas_corretas[i]:
             pontuacao += 1
     
-    # Exibir pontuação final
+    # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
         st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
+        novo_nivel = atualizar_nivel(pontuacao)
+        st.session_state['nivel'] = novo_nivel
+        st.balloons()
+        st.success(f"Você subiu para o Nível {novo_nivel}!")
 
-# Função de progresso e recompensas
-def progresso_e_recompensas(nivel_atual):
-    st.header("Seu Progresso")
-    st.write(f"Você está no nível {nivel_atual}!")
+# Função para simular o progresso e recompensas
+def progresso_e_recompensas():
+    st.header("Seu Progresso e Recompensas")
+    nivel_atual = st.session_state['nivel']
 
     # Definir metas para cada nível
     niveis = {
-        1: "Começando a aprender sobre orçamento e finanças básicas.",
-        2: "Agora você entende investimentos e como poupar efetivamente.",
-        3: "Você é um especialista em finanças pessoais!"
+        1: "Iniciante: Entendendo os conceitos básicos de finanças.",
+        2: "Aprendiz: Ganhando conhecimento sobre poupança e orçamento.",
+        3: "Intermediário: Compreendendo investimentos e gestão de dívidas.",
+        4: "Avançado: Fazendo boas decisões financeiras com confiança.",
+        5: "Expert: Mestre em finanças pessoais!"
     }
-    
-    if nivel_atual in niveis:
-        st.write(f"Objetivo do nível {nivel_atual}: {niveis[nivel_atual]}")
-    
-    # Mostrar recompensa
-    if st.button("Reivindicar Recompensa"):
-        if nivel_atual == 1:
-            st.balloons()
-            st.success("Parabéns! Você desbloqueou o nível 2!")
-        elif nivel_atual == 2:
-            st.balloons()
-            st.success("Incrível! Você desbloqueou o nível 3!")
-        elif nivel_atual == 3:
-            st.balloons()
-            st.success("Você completou todos os níveis! Você é um especialista!")
+
+    st.write(f"Você está no **Nível {nivel_atual}**!")
+    st.write(f"Descrição do seu nível: {niveis[nivel_atual]}")
+
+    # Mostrar recompensas com base no nível
+    if nivel_atual == 1:
+        st.write("Objetivo: Completar o quiz para ganhar o Nível 2.")
+    elif nivel_atual == 2:
+        st.write("Objetivo: Continuar aprendendo para atingir o Nível 3.")
+    elif nivel_atual == 3:
+        st.write("Objetivo: Investimentos e gestão de dívidas são as suas próximas metas.")
+    elif nivel_atual == 4:
+        st.write("Objetivo: Alcance o nível máximo de especialista financeiro.")
+    elif nivel_atual == 5:
+        st.write("Parabéns! Você atingiu o nível máximo e se tornou um especialista em finanças pessoais!")
+
 
 
 # Função principal da aplicação
 def main():
-    st.title("Plataforma Gamificada de Educação Financeira - Simulações Avançadas")
+   st.title("Plataforma Gamificada de Educação Financeira")
+
+    # Iniciar o nível do usuário na sessão, se ainda não existir
+    if 'nivel' not in st.session_state:
+        st.session_state['nivel'] = 1
+
+    # Exibir o nível atual no topo de todas as páginas
+    nivel_atual = st.session_state['nivel']
+    mostrar_nivel_topo(nivel_atual)
 
     # Menu de navegação
-    menu = ["Simulações de Investimentos e Finanças Pessoais", "Quiz Financeiro", "Progresso e Recompensas"]
+    menu = ["Quiz Financeiro", "Progresso e Recompensas", "Simulações de Finanças"]
     escolha = st.sidebar.selectbox("Selecione uma Opção", menu)
 
-    # Simulações complexas de finanças
-    if escolha == "Simulações de Investimentos e Finanças Pessoais":
-        simulacoes_complexas()
-    elif escolha == "Quiz Financeiro":
-        # Chamando a função do quiz (pode ser implementado conforme o código anterior)
-        quiz_interativo()
+    # Navegação entre os diferentes módulos
+    if escolha == "Quiz Financeiro":
+        quiz_interativo(nivel_atual)
     elif escolha == "Progresso e Recompensas":
-        # Chamando a função de progresso e recompensas (do código anterior)
-        progresso_e_recompensas(nivel_atual=1)
+        progresso_e_recompensas()
+    elif escolha == "Simulações de Finanças":
+        # Aqui você pode colocar a função de simulações de finanças pessoais ou investimentos
+        st.write("Simulações de Finanças será implementado em breve!")
 
 if __name__ == '__main__':
     main()
