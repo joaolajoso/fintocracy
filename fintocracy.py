@@ -222,7 +222,7 @@ def main():
         progresso_e_recompensas()
     elif escolha == "Simulações de Finanças":
         # Aqui você pode colocar a função de simulações de finanças pessoais ou investimentos
-        st.write("Simulações de Finanças será implementado em breve!")
-
+        simulacoes_complexas()
+        
 if __name__ == '__main__':
     main()
