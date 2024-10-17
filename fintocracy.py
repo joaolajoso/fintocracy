@@ -131,43 +131,6 @@ def atualizar_nivel(pontuacao):
 def mostrar_nivel_topo(nivel_atual):
     st.markdown(f"### Seu nível atual: **Nível {nivel_atual}**")
 
-# Função de quiz interativo com níveis
-def quiz_interativo(nivel_atual):
-    st.header("Quiz de Educação Financeira")
-    st.write("Responda as perguntas para testar seu conhecimento e subir de nível.")
-
-    # Perguntas do quiz
-    perguntas = {
-        "O que é um orçamento?": ["Plano para gastar dinheiro", "Ferramenta de investimento", "Uma poupança"],
-        "Qual é a melhor maneira de evitar dívidas?": ["Gastar mais do que ganha", "Poupar dinheiro", "Fazer empréstimos"],
-        "Qual das seguintes opções é considerada um bom investimento?": ["Jogo de azar", "Ações", "Compras impulsivas"],
-        "O que é um fundo de emergência?": ["Dinheiro para emergências", "Dinheiro para gastar em férias", "Investimento em ações"],
-        "Qual é a principal função de um cartão de crédito?": ["Gastar sem limites", "Fazer compras e pagar depois", "Aumentar o saldo bancário"]
-    }
-    
-    respostas_corretas = [
-        "Plano para gastar dinheiro", 
-        "Poupar dinheiro", 
-        "Ações", 
-        "Dinheiro para emergências", 
-        "Fazer compras e pagar depois"
-    ]
-    
-    # Coletar respostas do usuário
-    pontuacao = 0
-    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-        resposta = st.radio(pergunta, opcoes)
-        if resposta == respostas_corretas[i]:
-            pontuacao += 1
-    
-    # Exibir pontuação final e atualizar o nível
-    if st.button("Submeter Respostas"):
-        st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
-        novo_nivel = atualizar_nivel(pontuacao)
-        st.session_state['nivel'] = novo_nivel
-        st.balloons()
-        st.success(f"Você subiu para o Nível {novo_nivel}!")
-
 # Função para simular o progresso e recompensas
 def progresso_e_recompensas():
     st.header("Seu Progresso e Recompensas")
@@ -197,9 +160,54 @@ def progresso_e_recompensas():
     elif nivel_atual == 5:
         st.write("Parabéns! Você atingiu o nível máximo e se tornou um especialista em finanças pessoais!")
 
+# Função de quiz interativo com níveis
+def quiz_interativo(nivel_atual):
+    st.header("Quiz de Educação Financeira")
+    st.write("Responda as perguntas para testar seu conhecimento e subir de nível.")
 
+    # Novas perguntas do quiz
+    perguntas = {
+        "O que é um orçamento?": ["Plano para gastar dinheiro", "Ferramenta de investimento", "Uma poupança"],
+        "Qual é a melhor maneira de evitar dívidas?": ["Gastar mais do que ganha", "Poupar dinheiro", "Fazer empréstimos"],
+        "Qual das seguintes opções é considerada um bom investimento?": ["Jogo de azar", "Ações", "Compras impulsivas"],
+        "O que é um fundo de emergência?": ["Dinheiro para emergências", "Dinheiro para gastar em férias", "Investimento em ações"],
+        "Qual é a principal função de um cartão de crédito?": ["Gastar sem limites", "Fazer compras e pagar depois", "Aumentar o saldo bancário"],
+        "O que é diversificação de investimentos?": ["Investir em diferentes tipos de ativos", "Colocar todo o dinheiro em um único investimento", "Gastar em várias coisas"],
+        "Qual é a fórmula básica para calcular juros compostos?": ["Principal * (1 + taxa)^tempo", "Principal / taxa", "Principal - tempo"],
+        "O que é o prazo de carência em um empréstimo?": ["Período antes de começar a pagar", "Taxa de juros", "A data de vencimento final"],
+        "O que significa planejar a aposentadoria?": ["Economizar ao longo da vida para o futuro", "Investir em ações de curto prazo", "Gastar todo o dinheiro na aposentadoria"],
+        "Qual é a importância de um planejamento de dívida?": ["Evitar pagar juros excessivos", "Aumentar as dívidas", "Ignorar os pagamentos de juros"]
+    }
+    
+    respostas_corretas = [
+        "Plano para gastar dinheiro", 
+        "Poupar dinheiro", 
+        "Ações", 
+        "Dinheiro para emergências", 
+        "Fazer compras e pagar depois",
+        "Investir em diferentes tipos de ativos",
+        "Principal * (1 + taxa)^tempo",
+        "Período antes de começar a pagar",
+        "Economizar ao longo da vida para o futuro",
+        "Evitar pagar juros excessivos"
+    ]
+    
+    # Coletar respostas do usuário
+    pontuacao = 0
+    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+        resposta = st.radio(pergunta, opcoes)
+        if resposta == respostas_corretas[i]:
+            pontuacao += 1
+    
+    # Exibir pontuação final e atualizar o nível
+    if st.button("Submeter Respostas"):
+        st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
+        novo_nivel = atualizar_nivel(pontuacao)
+        st.session_state['nivel'] = novo_nivel
+        st.balloons()
+        st.success(f"Você subiu para o Nível {novo_nivel}!")
 
-# Função principal da aplicação
+# Função principal da aplicação (mantida igual)
 def main():
     st.title("Plataforma Gamificada de Educação Financeira")
 
@@ -221,8 +229,10 @@ def main():
     elif escolha == "Progresso e Recompensas":
         progresso_e_recompensas()
     elif escolha == "Simulações de Finanças":
-        # Aqui você pode colocar a função de simulações de finanças pessoais ou investimentos
         simulacoes_complexas()
+        
+if __name__ == '__main__':
+    main()
         
 if __name__ == '__main__':
     main()
