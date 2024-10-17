@@ -230,7 +230,7 @@ def generate_questions():
         "max_tokens": 1024,
         "questions": 10  # Number of questions to generate dynamically
     }
-    
+    train_dataset, test_dataset = groq_qa.generate(custom_config)
     try:
         train_dataset, test_dataset = groq_qa.generate(custom_config)
     except Exception as e:
