@@ -213,11 +213,15 @@ def quiz_interativo(nivel_atual):
 
 # Function to generate questions dynamically using Groq API
 def generate_questions():
-    # Configuration for QA generation
+    api_key = os.getenv('GROQ_API_KEY')
+    
+    if not api_key:
+        st.error("API key not found. Please set the GROQ_API_KEY environment variable.")
+        return []
+
     custom_config = {
-        "api_key": os.getenv('GROQ_API_KEY'),  # Use your Groq API key
-        "system_prompt": "Generate multiple-choice questions about financial literacy in Portuguese of Portugal, including budgeting, investments, retirement planning, and debt management.",
-        "sample_question": "What is a budget?",
+        "api_key": api_key,  # Use your Groq API key
+        "system_prompt": "Generate multiple-choice questions about financial literacy...",
         "model": "llama-3.1-70b-versatile",
         "chunk_size": 512,
         "tokens_per_question": 60,
