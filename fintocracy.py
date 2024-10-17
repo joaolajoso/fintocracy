@@ -201,20 +201,20 @@ def progresso_e_recompensas():
 
 # Função principal da aplicação
 def main():
-   st.title("Plataforma Gamificada de Educação Financeira")
+    st.title("Plataforma Gamificada de Educação Financeira")
 
     # Iniciar o nível do usuário na sessão, se ainda não existir
     if 'nivel' not in st.session_state:
         st.session_state['nivel'] = 1
-
+    
     # Exibir o nível atual no topo de todas as páginas
     nivel_atual = st.session_state['nivel']
     mostrar_nivel_topo(nivel_atual)
-
+    
     # Menu de navegação
     menu = ["Quiz Financeiro", "Progresso e Recompensas", "Simulações de Finanças"]
     escolha = st.sidebar.selectbox("Selecione uma Opção", menu)
-
+    
     # Navegação entre os diferentes módulos
     if escolha == "Quiz Financeiro":
         quiz_interativo(nivel_atual)
