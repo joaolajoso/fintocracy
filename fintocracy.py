@@ -224,7 +224,7 @@ def generate_questions():
         "tokens_per_question": 60,
         "temperature": 0.1,
         "max_tokens": 1024,
-        "questions": 10  # Make sure this key is included
+        "questions": 1  # Make sure this key is included
     }
 
     
