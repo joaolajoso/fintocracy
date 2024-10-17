@@ -82,6 +82,89 @@ def simulacoes_complexas():
             st.success(f"Você pagará sua dívida em {meses} meses.")
         else:
             st.error("Com este pagamento mensal, a dívida não será quitada. Tente aumentar o valor do pagamento.")
+ Função para calcular feedback financeiro com base em uma simulação
+def calcular_feedback(acao, valor):
+    if acao == 'Investir':
+        retorno = valor * 1.1  # Simulação simples de 10% de retorno
+        feedback = f"Bom trabalho! Você investiu {valor} e agora tem {retorno}."
+    elif acao == 'Poupar':
+        retorno = valor * 1.05  # Simulação de 5% de retorno
+        feedback = f"Ótima escolha! Você poupou {valor} e agora tem {retorno}."
+    elif acao == 'Gastar':
+        retorno = valor * 0.9  # Simulação de perda de 10%
+        feedback = f"Cuidado! Você gastou {valor} e agora perdeu parte, ficando com {retorno}."
+    else:
+        retorno = valor
+        feedback = f"Nenhuma ação foi tomada."
+    return retorno, feedback
+
+# Função para simulação de orçamento
+def simulacao_orcamento():
+    st.header("Simulação de Orçamento")
+    st.write("Gerencie seu orçamento mensal e veja os impactos de suas decisões financeiras.")
+
+    # Inputs do usuário
+    valor = st.number_input("Quanto você deseja gerenciar? (em euros)", min_value=0, step=100)
+    acao = st.selectbox("Escolha uma ação financeira:", ['Investir', 'Poupar', 'Gastar'])
+
+    # Calcular feedback
+    if st.button("Executar Ação"):
+        saldo, feedback = calcular_feedback(acao, valor)
+        st.success(feedback)
+        st.write(f"Seu saldo atual: {saldo} euros")
+
+# Função de quiz interativo
+def quiz_interativo():
+    st.header("Quiz de Educação Financeira")
+    st.write("Responda as perguntas para testar seu conhecimento sobre finanças pessoais.")
+
+    # Perguntas do quiz
+    perguntas = {
+        "O que é um orçamento?": ["Plano para gastar dinheiro", "Ferramenta de investimento", "Uma poupança"],
+        "Qual é a melhor maneira de evitar dívidas?": ["Gastar mais do que ganha", "Poupar dinheiro", "Fazer empréstimos"],
+        "Qual das seguintes opções é considerada um bom investimento?": ["Jogo de azar", "Ações", "Compras impulsivas"]
+    }
+    
+    respostas_corretas = ["Plano para gastar dinheiro", "Poupar dinheiro", "Ações"]
+    
+    # Coletar respostas do usuário
+    pontuacao = 0
+    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+        resposta = st.radio(pergunta, opcoes)
+        if resposta == respostas_corretas[i]:
+            pontuacao += 1
+    
+    # Exibir pontuação final
+    if st.button("Submeter Respostas"):
+        st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
+
+# Função de progresso e recompensas
+def progresso_e_recompensas(nivel_atual):
+    st.header("Seu Progresso")
+    st.write(f"Você está no nível {nivel_atual}!")
+
+    # Definir metas para cada nível
+    niveis = {
+        1: "Começando a aprender sobre orçamento e finanças básicas.",
+        2: "Agora você entende investimentos e como poupar efetivamente.",
+        3: "Você é um especialista em finanças pessoais!"
+    }
+    
+    if nivel_atual in niveis:
+        st.write(f"Objetivo do nível {nivel_atual}: {niveis[nivel_atual]}")
+    
+    # Mostrar recompensa
+    if st.button("Reivindicar Recompensa"):
+        if nivel_atual == 1:
+            st.balloons()
+            st.success("Parabéns! Você desbloqueou o nível 2!")
+        elif nivel_atual == 2:
+            st.balloons()
+            st.success("Incrível! Você desbloqueou o nível 3!")
+        elif nivel_atual == 3:
+            st.balloons()
+            st.success("Você completou todos os níveis! Você é um especialista!")
+
 
 # Função principal da aplicação
 def main():
