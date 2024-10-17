@@ -3,6 +3,7 @@ import streamlit as st
 import yfinance as yf
 import datetime as dt
 from groq_qa_generator import groq_qa
+import os
 
 
 # Função para simular o retorno de um investimento em ações
