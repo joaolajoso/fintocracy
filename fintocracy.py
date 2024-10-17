@@ -3,6 +3,7 @@ import streamlit as st
 import yfinance as yf
 import datetime as dt
 from groq_qa_generator import groq_qa
+from groq import Groq
 import os
 
 
