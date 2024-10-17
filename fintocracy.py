@@ -211,47 +211,42 @@ def quiz_interativo(nivel_atual):
         st.success(f"Você subiu para o Nível {novo_nivel}!")
 
 
+# Function to generate questions dynamically using Groq API
 def generate_questions():
     # Configuration for QA generation
     custom_config = {
-        "api_key": os.getenv('GROQ_API_KEY'),
+        "api_key": os.getenv('GROQ_API_KEY'),  # Use your Groq API key
         "system_prompt": "Generate multiple-choice questions about financial literacy in Portuguese of Portugal, including budgeting, investments, retirement planning, and debt management.",
         "sample_question": "What is a budget?",
-        "input_data": "go.txt",
-        "output_file": "qa_output.txt",
         "model": "llama-3.1-70b-versatile",
         "chunk_size": 512,
         "tokens_per_question": 60,
         "temperature": 0.1,
         "max_tokens": 1024,
-        "questions": 1  # Make sure this key is included
+        "questions": 10  # Number of questions to generate dynamically
     }
-
     
     # Generate QA pairs using the configured model
-    train_dataset, test_dataset = groq_qa.generate(custom_config)
-    
-    # Load the generated questions
-    with open(custom_config['output_file'], 'r') as f:
-        questions = f.readlines()
+    try:
+        return groq_qa.generate(custom_config)
+    except Exception as e:
+        st.error(f"Error generating questions: {str(e)}")
+        return []
 
-# Load the Groq-generated questions
-def load_generated_questions():
-    generate_questions()
-    with open('qa_output.txt', 'r') as file:
-        generated_questions = file.readlines()
-    return generated_questions
-
-# Function to update the quiz to include Groq-generated questions
+# Function to display the dynamically generated questions
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
     
-    # Load generated questions from Groq
-    generated_questions = load_generated_questions()
+    # Dynamically generate questions using Groq API
+    questions = generate_questions()
     
-    # Display each generated question
-    for question in generated_questions:
-        parts = question.split("|")
+    if not questions:
+        st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
+        return
+    
+    # Iterate through the generated questions and display them
+    for question_data in questions:
+        parts = question_data.split("|")
         pergunta = parts[0]
         opcoes = parts[1].split(",")
         
@@ -261,7 +256,7 @@ def quiz_interativo_with_groq(nivel_atual):
         st.success("Quiz submetido com sucesso!")
         # Handle response checking and level progression here
 
-# Função principal da aplicação (mantida igual)
+# Main function for app
 def main():
     st.title("Plataforma Gamificada de Educação Financeira")
 
@@ -281,11 +276,11 @@ def main():
     if escolha == "Quiz Financeiro":
         quiz_interativo(nivel_atual)
     elif escolha == "Quiz Finceiro Intel":
-        quiz_interativo_with_groq(nivel_atual)
+        quiz_interativo_with_groq(nivel_atual)  # Dynamic Groq questions
     elif escolha == "Progresso e Recompensas":
         progresso_e_recompensas()
     elif escolha == "Simulações de Finanças":
         simulacoes_complexas()
-        
+
 if __name__ == '__main__':
     main()
