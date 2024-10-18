@@ -229,14 +229,27 @@ def generate_questions():
 
     client = Groq(api_key=api_key)
     
-    prompt_pagination = (
-        "Generate multiple-choice questions about financial literacy, "
-        "with the following content as a reference: \n\n"
-        f"{markdown_content}\n"
-        "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add '>' at beggining with no space like '>Option3'. theres is no other special charecters or numbers."
-        "formatted as sample: 'Qual é a melhor maneira de evitar dívidas? | Gastar mais do que ganha, >Poupar dinheiro, Fazer empréstimos, Jantar fora'."
-    )
+    #prompt_pagination = (
+    #    "Generate multiple-choice questions about financial literacy, "
+    #    "with the following content as a reference: \n\n"
+    #    f"{markdown_content}\n"
+    #    "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add '>' at beggining with no space like '>Option3'. theres is no other special charecters or numbers."
+    #    "formatted as sample: 'Qual é a melhor maneira de evitar dívidas? | Gastar mais do que ganha, >Poupar dinheiro, Fazer empréstimos, Jantar fora'."
+    #)
     #and < at end. 
+    prompt_pagination = (
+        "Gere perguntas de múltipla escolha sobre literacia financeira, "
+        "usando o seguinte conteúdo como referência: \n\n"
+        f"{markdown_content}\n"
+        "Por favor, forneça 10 perguntas, cada uma acompanhada das suas opções e da resposta correta. "
+        "As perguntas devem estar escritas em português de Portugal. "
+        "Adicione um '>' antes da resposta correta, sem espaço após o símbolo, por exemplo, '>Opção3'. "
+        "As perguntas e opções devem ser formatadas como no exemplo a seguir: "
+        "'Qual é a melhor maneira de evitar dívidas? | Gastar mais do que ganha, >Poupar dinheiro, Fazer empréstimos, Jantar fora'. "
+        "Certifique-se de que não haja outros caracteres especiais ou números na formatação."
+    )
+
+    
     try:
         response = client.chat.completions.create(
             model=GROQ_LLAMA_MODEL_FULLNAME,
