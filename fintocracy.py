@@ -311,7 +311,6 @@ def quiz_interativo_with_groq(nivel_atual):
                 parts = question_data.split("|")
                 pergunta = parts[0].strip()
                 opcoes = parts[1].split(",")
-                print(opcoes)
                 # Adicionar pergunta e opções ao dicionário
                 perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
                 
