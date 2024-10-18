@@ -275,7 +275,7 @@ def generate_questions():
 
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
-
+    pontuacao = 0
     # Verificar se as perguntas já foram geradas
     if 'perguntas' not in st.session_state:
         # Gerar perguntas dinamicamente usando a API Groq
@@ -302,7 +302,7 @@ def quiz_interativo_with_groq(nivel_atual):
                 respostas_corretas.append(resposta_correta)
                 
  
-        #print(respostas_corretas)
+        print(respostas_corretas)
         # Armazenar as perguntas e respostas corretas no session_state
         st.session_state['perguntas'] = perguntas
         st.session_state['respostas_corretas'] = respostas_corretas
@@ -319,9 +319,9 @@ def quiz_interativo_with_groq(nivel_atual):
     print(respostas)
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
-            # Coletar respostas do usuário
+        # Coletar respostas do usuário
         # Adicione aqui o restante do seu código para interagir com o usuário
-        pontuacao = 0
+
         for i, (pergunta, opcoes) in enumerate(perguntas.items()):
             # Verificar se a resposta é correta e atualizar a pontuação
             print(f"{respostas[i]} == {respostas_corretas[i]}")
@@ -333,7 +333,7 @@ def quiz_interativo_with_groq(nivel_atual):
         st.session_state['nivel'] = novo_nivel
         st.balloons()
         st.success(f"Você subiu para o Nível {novo_nivel}!")
-        pontuacao += 1
+
 
 
 
