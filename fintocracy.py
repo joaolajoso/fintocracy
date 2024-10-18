@@ -311,8 +311,10 @@ def quiz_interativo_with_groq(nivel_atual):
     # Recuperar perguntas e respostas corretas do session_state
     perguntas = st.session_state['perguntas']
     respostas_corretas = st.session_state['respostas_corretas']
+    respostas = []
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
         resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
+        respostas.append(resposta)
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
             # Coletar respostas do usuário
@@ -320,8 +322,8 @@ def quiz_interativo_with_groq(nivel_atual):
         pontuacao = 0
         for i, (pergunta, opcoes) in enumerate(perguntas.items()):
             # Verificar se a resposta é correta e atualizar a pontuação
-            print(f"{resposta} == {respostas_corretas[i]}")
-            if resposta == respostas_corretas[i]:
+            print(f"{respostas[i]} == {respostas_corretas[i]}")
+            if espostas[i] == respostas_corretas[i]:
                 st.session_state['pontuacao'] += 1
         pontuacao = st.session_state['pontuacao']
         st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
@@ -330,13 +332,7 @@ def quiz_interativo_with_groq(nivel_atual):
         st.balloons()
         st.success(f"Você subiu para o Nível {novo_nivel}!")
         pontuacao += 1
-        
-        if st.button("Submeter Respostas"):
-            st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
-            novo_nivel = atualizar_nivel(pontuacao)
-            st.session_state['nivel'] = novo_nivel
-            st.balloons()
-            st.success(f"Você subiu para o Nível {novo_nivel}!")
+
 
 
 
