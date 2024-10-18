@@ -277,29 +277,29 @@ def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
     pontuacao = 0
     # Verificar se as perguntas já foram geradas
-    #if 'perguntas' not in st.session_state:
-    # Gerar perguntas dinamicamente usando a API Groq
-    questions = generate_questions()
+    if 'perguntas' not in st.session_state:
+        # Gerar perguntas dinamicamente usando a API Groq
+        questions = generate_questions()
+        
+        if not questions or isinstance(questions, str):
+            st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
+            return
     
-    if not questions or isinstance(questions, str):
-        st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
-        return
-
-    # Dicionário para armazenar as perguntas e opções
-    perguntas = {}
-    respostas_corretas = []  # Lista para armazenar as respostas corretas
-
-    for index, question_data in enumerate(questions):
-        respostas_corretas = []
-        for question_data in questions:
-            parts = question_data.split("|")
-            pergunta = parts[0].strip()
-            opcoes = parts[1].split(",")
-            # Adicionar pergunta e opções ao dicionário
-            perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
-            
-            resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith(' >')), None)
-            respostas_corretas.append(resposta_correta)
+        # Dicionário para armazenar as perguntas e opções
+        perguntas = {}
+        respostas_corretas = []  # Lista para armazenar as respostas corretas
+    
+        for index, question_data in enumerate(questions):
+            respostas_corretas = []
+            for question_data in questions:
+                parts = question_data.split("|")
+                pergunta = parts[0].strip()
+                opcoes = parts[1].split(",")
+                # Adicionar pergunta e opções ao dicionário
+                perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
+                
+                resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith(' >')), None)
+                respostas_corretas.append(resposta_correta)
             
 
     print(respostas_corretas)
@@ -315,6 +315,9 @@ def quiz_interativo_with_groq(nivel_atual):
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
         resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
         respostas.append(resposta.strip().lstrip('>'))
+        print(f"{respostas[i]} == {respostas_corretas[i]}")
+        if respostas[i] == respostas_corretas[i]:
+            st.session_state['pontuacao'] += 1
 
     print(respostas)
     # Exibir pontuação final e atualizar o nível
@@ -322,11 +325,11 @@ def quiz_interativo_with_groq(nivel_atual):
         # Coletar respostas do usuário
         # Adicione aqui o restante do seu código para interagir com o usuário
 
-        for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+        #for i, (pergunta, opcoes) in enumerate(perguntas.items()):
             # Verificar se a resposta é correta e atualizar a pontuação
-            print(f"{respostas[i]} == {respostas_corretas[i]}")
-            if respostas[i] == respostas_corretas[i]:
-                st.session_state['pontuacao'] += 1
+        #    print(f"{respostas[i]} == {respostas_corretas[i]}")
+        #    if respostas[i] == respostas_corretas[i]:
+        #        st.session_state['pontuacao'] += 1
         pontuacao = st.session_state['pontuacao']
         st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
         novo_nivel = atualizar_nivel(pontuacao)
