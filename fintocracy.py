@@ -319,7 +319,7 @@ def quiz_interativo_with_groq(nivel_atual):
             if respostas[i] == respostas_corretas[i]:
                 st.session_state['pontuacao'] += 1
 
-    print(respostas)
+        print(respostas)
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
         # Coletar respostas do usuário
