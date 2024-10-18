@@ -271,26 +271,46 @@ def generate_questions():
 # Function to display the dynamically generated questions
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
-    
-    # Dynamically generate questions using Groq API
+
+    # Gerar perguntas dinamicamente usando a API Groq
     questions = generate_questions()
-    
+
     if not questions or isinstance(questions, str):
         st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
         return
-    
-    # Iterate through the generated questions and display them
+
+    # Dicionário para armazenar as perguntas e opções
+    perguntas = {}
+    respostas_corretas = []  # Lista para armazenar as respostas corretas
+
+    # Iterar pelas perguntas geradas e exibi-las
     for index, question_data in enumerate(questions):
         parts = question_data.split("|")
         pergunta = parts[0].strip()
         opcoes = parts[1].split(",")
         
-        # Provide a unique key using the index
-        resposta = st.radio(pergunta, [opcao.strip() for opcao in opcoes], key=f"radio_{index}")
-    
+        # Adicionar pergunta e opções ao dicionário
+        perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
+        # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
+        respostas_corretas.append(opcoes[0].strip())  
+
+        # Fornecer uma chave única usando o índice
+        resposta = st.radio(pergunta, perguntas[pergunta], key=f"radio_{index}")
+
+    # Coletar respostas do usuário
+    pontuacao = 0
+    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+        resposta = st.session_state.get(f"radio_{i}")  # Recuperar a resposta escolhida
+        if resposta == respostas_corretas[i]:
+            pontuacao += 1
+
+    # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
-        st.success("Quiz submetido com sucesso!")
-        # Handle response checking and level progression here
+        st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
+        novo_nivel = atualizar_nivel(pontuacao)
+        st.session_state['nivel'] = novo_nivel
+        st.balloons()
+        st.success(f"Você subiu para o Nível {novo_nivel}!")
 
 
 
