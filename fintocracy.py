@@ -233,7 +233,7 @@ def generate_questions():
         "Generate multiple-choice questions about financial literacy, "
         "with the following content as a reference: \n\n"
         f"{markdown_content}\n"
-        "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add '>' at beggining with no space. theres is no special charecters."
+        "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add '>' at beggining with no space like '>Option3'. theres is no other special charecters or numbers."
         "formatted as: 'Question | Option1, Option2, Option3, Option4'."
     )
     #and < at end. 
