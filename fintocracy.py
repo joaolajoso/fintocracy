@@ -314,7 +314,7 @@ def quiz_interativo_with_groq(nivel_atual):
     respostas = []
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
         resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
-        respostas.append(resposta)
+        respostas.append(resposta.strip().lstrip('>'))
 
     print(respostas)
     # Exibir pontuação final e atualizar o nível
