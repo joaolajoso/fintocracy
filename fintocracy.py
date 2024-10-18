@@ -234,7 +234,7 @@ def generate_questions():
         "with the following content as a reference: \n\n"
         f"{markdown_content}\n"
         "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add '>' at beggining with no space like '>Option3'. theres is no other special charecters or numbers."
-        "formatted as: 'Question | Option1, Option2, Option3, Option4'."
+        "formatted as: 'Qual é a melhor maneira de evitar dívidas? | Gastar mais do que ganha, >Poupar dinheiro, Fazer empréstimos, Jantar fora'."
     )
     #and < at end. 
     try:
