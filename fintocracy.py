@@ -312,14 +312,14 @@ def quiz_interativo_with_groq(nivel_atual):
         perguntas = st.session_state['perguntas']
         respostas_corretas = st.session_state['respostas_corretas']
         respostas = []
-        for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-            resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
-            respostas.append(resposta.strip().lstrip('>'))
-            print(f"{respostas[i]} == {respostas_corretas[i]}")
-            if respostas[i] == respostas_corretas[i]:
-                st.session_state['pontuacao'] += 1
+    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+        resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
+        respostas.append(resposta.strip().lstrip('>'))
+        print(f"{respostas[i]} == {respostas_corretas[i]}")
+        if respostas[i] == respostas_corretas[i]:
+            st.session_state['pontuacao'] += 1
 
-        print(respostas)
+    print(respostas)
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
         # Coletar respostas do usuário
