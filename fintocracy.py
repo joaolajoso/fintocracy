@@ -311,19 +311,17 @@ def quiz_interativo_with_groq(nivel_atual):
                 parts = question_data.split("|")
                 pergunta = parts[0].strip()
                 opcoes = parts[1].split(",")
-    
+                print(opcoes)
                 # Adicionar pergunta e opções ao dicionário
                 perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
                 
                 # Processar a resposta correta para remover os símbolos
-                resposta_correta = opcoes[0].strip()
-                if resposta_correta.startswith('>') :
+                #resposta_correta = opcoes[0].strip()
+                #if resposta_correta.startswith('>') :
                     #or resposta_correta.endswith('<')
                     #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
-                    resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith('>')), None)
+                resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith('>')), None)
                 
-                if resposta_correta:
-                    respostas_corretas.append(resposta_correta)
  
         print(respostas_corretas)
         # Armazenar as perguntas e respostas corretas no session_state
