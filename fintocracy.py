@@ -306,23 +306,23 @@ def quiz_interativo_with_groq(nivel_atual):
             # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
         #    respostas_corretas.append(opcoes[0].strip())
         for index, question_data in enumerate(questions):
-        respostas_corretas = []
-        for question_data in questions:
-            parts = question_data.split("|")
-            pergunta = parts[0].strip()
-            opcoes = parts[1].split(",")
-
-            # Adicionar pergunta e opções ao dicionário
-            perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
-            
-            # Processar a resposta correta para remover os símbolos
-            resposta_correta = opcoes[0].strip()
-            if resposta_correta.startswith('>') :
-                #or resposta_correta.endswith('<')
-                #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
-            resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith('>')), None)
-            if resposta_correta:
-                respostas_corretas.append(resposta_correta)
+            respostas_corretas = []
+            for question_data in questions:
+                parts = question_data.split("|")
+                pergunta = parts[0].strip()
+                opcoes = parts[1].split(",")
+    
+                # Adicionar pergunta e opções ao dicionário
+                perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
+                
+                # Processar a resposta correta para remover os símbolos
+                resposta_correta = opcoes[0].strip()
+                if resposta_correta.startswith('>') :
+                    #or resposta_correta.endswith('<')
+                    #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
+                resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith('>')), None)
+                if resposta_correta:
+                    respostas_corretas.append(resposta_correta)
  
         print(respostas_corretas)
         # Armazenar as perguntas e respostas corretas no session_state
