@@ -53,7 +53,7 @@ def simulacoes_complexas():
     st.subheader("Simulação de Investimento em Ações")
     lista = ["AAPL", "NVDA", "TSLA", "Digite o código da ação"]
     ticker = st.selectbox("Selecione uma Opção", lista)
-    if ticker == "Digite o código da ação": ticker = st.textinput("Digite o código da ação (ex: AAPL, TSLA)", value="AAPL")
+    if ticker == "Digite o código da ação": ticker = st.text_input("Digite o código da ação (ex: AAPL, TSLA)", value="AAPL")
     valor_investido = st.number_input("Quanto você deseja investir? (em euros)", min_value=100.0, step=100.0)
     data_inicial = st.date_input("Data de início", value=dt.date(2023, 1, 1))
     data_final = st.date_input("Data final", value=dt.date(2023, 12, 31))
