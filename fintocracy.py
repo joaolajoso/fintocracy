@@ -301,41 +301,41 @@ def quiz_interativo_with_groq(nivel_atual):
                 resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith(' >')), None)
                 respostas_corretas.append(resposta_correta)
             
-
-    #print(respostas_corretas)
-    # Armazenar as perguntas e respostas corretas no session_state
-    st.session_state['perguntas'] = perguntas
-    st.session_state['respostas_corretas'] = respostas_corretas
-    st.session_state['pontuacao'] = 0  # Reiniciar pontuação
-
-    # Recuperar perguntas e respostas corretas do session_state
-    perguntas = st.session_state['perguntas']
-    respostas_corretas = st.session_state['respostas_corretas']
-    respostas = []
-    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-        resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
-        respostas.append(resposta.strip().lstrip('>'))
-        print(f"{respostas[i]} == {respostas_corretas[i]}")
-        if respostas[i] == respostas_corretas[i]:
-            st.session_state['pontuacao'] += 1
-
-    print(respostas)
-    # Exibir pontuação final e atualizar o nível
-    if st.button("Submeter Respostas"):
-        # Coletar respostas do usuário
-        # Adicione aqui o restante do seu código para interagir com o usuário
-
-        #for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-            # Verificar se a resposta é correta e atualizar a pontuação
-        #    print(f"{respostas[i]} == {respostas_corretas[i]}")
-        #    if respostas[i] == respostas_corretas[i]:
-        #        st.session_state['pontuacao'] += 1
-        pontuacao = st.session_state['pontuacao']
-        st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
-        novo_nivel = atualizar_nivel(pontuacao)
-        st.session_state['nivel'] = novo_nivel
-        st.balloons()
-        st.success(f"Você subiu para o Nível {novo_nivel}!")
+    
+        #print(respostas_corretas)
+        # Armazenar as perguntas e respostas corretas no session_state
+        st.session_state['perguntas'] = perguntas
+        st.session_state['respostas_corretas'] = respostas_corretas
+        st.session_state['pontuacao'] = 0  # Reiniciar pontuação
+    
+        # Recuperar perguntas e respostas corretas do session_state
+        perguntas = st.session_state['perguntas']
+        respostas_corretas = st.session_state['respostas_corretas']
+        respostas = []
+        for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+            resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
+            respostas.append(resposta.strip().lstrip('>'))
+            print(f"{respostas[i]} == {respostas_corretas[i]}")
+            if respostas[i] == respostas_corretas[i]:
+                st.session_state['pontuacao'] += 1
+    
+        print(respostas)
+        # Exibir pontuação final e atualizar o nível
+        if st.button("Submeter Respostas"):
+            # Coletar respostas do usuário
+            # Adicione aqui o restante do seu código para interagir com o usuário
+    
+            #for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+                # Verificar se a resposta é correta e atualizar a pontuação
+            #    print(f"{respostas[i]} == {respostas_corretas[i]}")
+            #    if respostas[i] == respostas_corretas[i]:
+            #        st.session_state['pontuacao'] += 1
+            pontuacao = st.session_state['pontuacao']
+            st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
+            novo_nivel = atualizar_nivel(pontuacao)
+            st.session_state['nivel'] = novo_nivel
+            st.balloons()
+            st.success(f"Você subiu para o Nível {novo_nivel}!")
 
 
 
