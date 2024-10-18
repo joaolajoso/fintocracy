@@ -233,10 +233,10 @@ def generate_questions():
         "Generate multiple-choice questions about financial literacy, "
         "with the following content as a reference: \n\n"
         f"{markdown_content}\n"
-        "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add > at beggining and < at end. "
+        "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add '>' at beggining no space "
         "formatted as: '1. Question | Option1, Option2, Option3, Option4'."
     )
-    
+    #and < at end. 
     try:
         response = client.chat.completions.create(
             model=GROQ_LLAMA_MODEL_FULLNAME,
@@ -304,8 +304,8 @@ def quiz_interativo_with_groq(nivel_atual):
             
             # Processar a resposta correta para remover os símbolos
             resposta_correta = opcoes[0].strip()
-            if resposta_correta.startswith('>') or resposta_correta.endswith('<'):
-                #
+            if resposta_correta.startswith('>') :
+                #or resposta_correta.endswith('<')
                 #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
                 respostas_corretas.append(resposta_correta)
  
