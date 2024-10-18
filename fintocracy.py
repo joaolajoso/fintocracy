@@ -275,30 +275,23 @@ def quiz_interativo_with_groq(nivel_atual):
     # Dynamically generate questions using Groq API
     questions = generate_questions()
     
-    if not questions:
+    if not questions or isinstance(questions, str):
         st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
         return
     
     # Iterate through the generated questions and display them
-    for question_data in questions:
-        # Print the question_data to debug
-        st.write(f"Question Data: {question_data}")  # Debug line
-
+    for index, question_data in enumerate(questions):
         parts = question_data.split("|")
-        
-        # Check if parts has the expected length
-        if len(parts) < 2:
-            st.error(f"Formato inválido para a pergunta: {question_data}")
-            continue  # Skip to the next iteration if the format is incorrect
-        
-        pergunta = parts[0]
+        pergunta = parts[0].strip()
         opcoes = parts[1].split(",")
         
-        resposta = st.radio(pergunta, opcoes)
+        # Provide a unique key using the index
+        resposta = st.radio(pergunta, [opcao.strip() for opcao in opcoes], key=f"radio_{index}")
     
     if st.button("Submeter Respostas"):
         st.success("Quiz submetido com sucesso!")
         # Handle response checking and level progression here
+
 
 
 # Main function for app
