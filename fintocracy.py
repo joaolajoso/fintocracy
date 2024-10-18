@@ -11,12 +11,12 @@ import os
 def simulacao_investimento_acao(ticker, valor_investido, data_inicial, data_final):
     # Obter os dados históricos do ticker
     dados = yf.download(ticker, start=data_inicial, end=data_final)
-    
+
     # Verificar se os dados estão disponíveis
     if not dados.empty:
         preco_inicial = dados['Close'].iloc[0]
         preco_final = dados['Close'].iloc[-1]
-        
+
         # Cálculo do retorno
         retorno = (preco_final / preco_inicial) * valor_investido
         lucro = retorno - valor_investido
@@ -86,7 +86,7 @@ def simulacoes_complexas():
             st.success(f"Você pagará sua dívida em {meses} meses.")
         else:
             st.error("Com este pagamento mensal, a dívida não será quitada. Tente aumentar o valor do pagamento.")
-            
+
 #Função para calcular feedback financeiro com base em uma simulação
 def calcular_feedback(acao, valor):
     if acao == 'Investir':
@@ -182,7 +182,7 @@ def quiz_interativo(nivel_atual):
         "O que significa planejar a aposentadoria?": ["Economizar ao longo da vida para o futuro", "Investir em ações de curto prazo", "Gastar todo o dinheiro na aposentadoria"],
         "Qual é a importância de um planejamento de dívida?": ["Evitar pagar juros excessivos", "Aumentar as dívidas", "Ignorar os pagamentos de juros"]
     }
-    
+
     respostas_corretas = [
         "Plano para gastar dinheiro", 
         "Poupar dinheiro", 
@@ -195,14 +195,14 @@ def quiz_interativo(nivel_atual):
         "Economizar ao longo da vida para o futuro",
         "Evitar pagar juros excessivos"
     ]
-    
+
     # Coletar respostas do usuário
     pontuacao = 0
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
         resposta = st.radio(pergunta, opcoes)
         if resposta == respostas_corretas[i]:
             pontuacao += 1
-    
+
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
         st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
@@ -228,7 +228,7 @@ def generate_questions():
         raise ValueError("API key não encontrada. Certifique-se de que a variável de ambiente GROQ_API_KEY está definida.")
 
     client = Groq(api_key=api_key)
-    
+
     #prompt_pagination = (
     #    "Generate multiple-choice questions about financial literacy, "
     #    "with the following content as a reference: \n\n"
@@ -249,7 +249,7 @@ def generate_questions():
         "Certifique-se de que não haja outros caracteres especiais ou números na formatação."
     )
 
-    
+
     try:
         response = client.chat.completions.create(
             model=GROQ_LLAMA_MODEL_FULLNAME,
@@ -258,7 +258,7 @@ def generate_questions():
                 {"role": "user", "content": markdown_content},
             ],
         )
-        
+
         response_content = response.choices[0].message.content.strip()
         print(response_content)
         # Split the response into lines and validate
@@ -271,55 +271,96 @@ def generate_questions():
                 formatted_question = question.strip()
                 if formatted_question:  # Only add non-empty lines
                     formatted_questions.append(formatted_question)
-        
+
         return formatted_questions  # Return the formatted questions
-    
+
     except Exception as e:
         print("Erro ao gerar perguntas:", str(e))
         return "Não foi possível gerar perguntas no momento. Tente novamente mais tarde. Priemeira linha"
 
 
 
-        
+
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
 
+    # Verificar se as perguntas já foram geradas
     if 'perguntas' not in st.session_state:
+        # Gerar perguntas dinamicamente usando a API Groq
         questions = generate_questions()
-
+        
         if not questions or isinstance(questions, str):
             st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
             return
 
+        # Dicionário para armazenar as perguntas e opções
         perguntas = {}
+        respostas_corretas = []  # Lista para armazenar as respostas corretas
+        # Iterar pelas perguntas geradas e exibi-las
+        #for index, question_data in enumerate(questions):
+        #    parts = question_data.split("|")
+        #    pergunta = parts[0].strip()
+        #    opcoes = parts[1].split(",")
+            # Adicionar pergunta e opções ao dicionário
+        #    perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
+            # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
+        #    respostas_corretas.append(opcoes[0].strip())
+        for index, question_data in enumerate(questions):
         respostas_corretas = []
-
         for question_data in questions:
             parts = question_data.split("|")
             pergunta = parts[0].strip()
             opcoes = parts[1].split(",")
 
+            # Adicionar pergunta e opções ao dicionário
             perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
+            
+            # Processar a resposta correta para remover os símbolos
+            resposta_correta = opcoes[0].strip()
+            if resposta_correta.startswith('>') :
+                #or resposta_correta.endswith('<')
+                #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
             resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith('>')), None)
             if resposta_correta:
                 respostas_corretas.append(resposta_correta)
-
+ 
         print(respostas_corretas)
+        # Armazenar as perguntas e respostas corretas no session_state
+        st.session_state['perguntas'] = perguntas
+        st.session_state['respostas_corretas'] = respostas_corretas
+        st.session_state['pontuacao'] = 0  # Reiniciar pontuação
+
+    # Recuperar perguntas e respostas corretas do session_state
+    perguntas = st.session_state['perguntas']
+    respostas_corretas = st.session_state['respostas_corretas']
+    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+        resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
+    # Exibir pontuação final e atualizar o nível
+    if st.button("Submeter Respostas"):
+            # Coletar respostas do usuário
         # Adicione aqui o restante do seu código para interagir com o usuário
         pontuacao = 0
         for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-            resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")  # Unique key added
-
+            # Verificar se a resposta é correta e atualizar a pontuação
+            resposta = st.radio(pergunta, opcoes)
+            if resposta == respostas_corretas[i]:
+                st.session_state['pontuacao'] += 1
+        pontuacao = st.session_state['pontuacao']
+        st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
+        novo_nivel = atualizar_nivel(pontuacao)
+        st.session_state['nivel'] = novo_nivel
+        st.balloons()
+        st.success(f"Você subiu para o Nível {novo_nivel}!")
+                pontuacao += 1
+        
         if st.button("Submeter Respostas"):
-            for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-                resposta = st.radio(pergunta, opcoes, key=f"radio_submit_{i}")  # Unique key for submitting
-                if resposta == respostas_corretas[i]:
-                    pontuacao += 1
             st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
             novo_nivel = atualizar_nivel(pontuacao)
             st.session_state['nivel'] = novo_nivel
             st.balloons()
             st.success(f"Você subiu para o Nível {novo_nivel}!")
+
+
 
 
 
@@ -330,15 +371,15 @@ def main():
     # Iniciar o nível do usuário na sessão, se ainda não existir
     if 'nivel' not in st.session_state:
         st.session_state['nivel'] = 1
-    
+
     # Exibir o nível atual no topo de todas as páginas
     nivel_atual = st.session_state['nivel']
     mostrar_nivel_topo(nivel_atual)
-    
+
     # Menu de navegação
     menu = ["Quiz Financeiro", "Quiz Finceiro Intel", "Progresso e Recompensas", "Simulações de Finanças"]
     escolha = st.sidebar.selectbox("Selecione uma Opção", menu)
-    
+
     # Navegação entre os diferentes módulos
     if escolha == "Quiz Financeiro":
         quiz_interativo(nivel_atual)
