@@ -292,12 +292,8 @@ def quiz_interativo_with_groq(nivel_atual):
 
             # Adicionar pergunta e opções ao dicionário
             perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
-            
-            # Processar a resposta correta para remover os símbolos
-            resposta_correta = opcoes[0].strip()
-            if resposta_correta.startswith('>') and resposta_correta.endswith('<'):
-                resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
-            respostas_corretas.append(resposta_correta)
+            # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
+            respostas_corretas.append(opcoes[0].strip())
 
         # Armazenar as perguntas e respostas corretas no session_state
         st.session_state['perguntas'] = perguntas
@@ -324,6 +320,7 @@ def quiz_interativo_with_groq(nivel_atual):
         st.session_state['nivel'] = novo_nivel
         st.balloons()
         st.success(f"Você subiu para o Nível {novo_nivel}!")
+
 
 
 
