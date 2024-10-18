@@ -51,7 +51,9 @@ def simulacoes_complexas():
 
     # Simulação de Investimento em Ações
     st.subheader("Simulação de Investimento em Ações")
-    ticker = st.text_input("Digite o código da ação (ex: AAPL, TSLA)", value="AAPL")
+    lista = ["Quiz Financeiro", "TSLA", "AAPL", "Digite o código da ação"]
+    ticker = st.selectbox("Selecione uma Opção", lista)
+    if ticker == "Digite o código da ação": ticker = st.textiput("Digite o código da ação (ex: AAPL, TSLA)", value="AAPL")
     valor_investido = st.number_input("Quanto você deseja investir? (em euros)", min_value=100.0, step=100.0)
     data_inicial = st.date_input("Data de início", value=dt.date(2023, 1, 1))
     data_final = st.date_input("Data final", value=dt.date(2023, 12, 31))
@@ -357,7 +359,7 @@ def main():
 
     # Menu de navegação
     menu = ["Quiz Financeiro", "Quiz Finceiro Intel", "Progresso e Recompensas", "Simulações de Finanças"]
-    escolha = st.sidebar.selectbox("Selecione uma Opção", menu)
+    escolha = st.selectbox("Selecione uma Opção", menu)
 
     # Navegação entre os diferentes módulos
     if escolha == "Quiz Financeiro":
