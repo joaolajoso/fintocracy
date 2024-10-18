@@ -258,7 +258,7 @@ def generate_questions():
                 formatted_question = question.strip()
                 if formatted_question:  # Only add non-empty lines
                     formatted_questions.append(formatted_question)
-        
+        print(formatted_questions)
         return formatted_questions  # Return the formatted questions
     
     except Exception as e:
