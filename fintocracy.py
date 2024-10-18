@@ -268,7 +268,6 @@ def generate_questions():
 
 
         
-# Function to display the dynamically generated questions
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
 
@@ -299,8 +298,7 @@ def quiz_interativo_with_groq(nivel_atual):
             if resposta_correta.startswith('>') and resposta_correta.endswith('<'):
                 resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
             respostas_corretas.append(resposta_correta)
-            
-        print(respostas_corretas)
+
         # Armazenar as perguntas e respostas corretas no session_state
         st.session_state['perguntas'] = perguntas
         st.session_state['respostas_corretas'] = respostas_corretas
@@ -312,16 +310,11 @@ def quiz_interativo_with_groq(nivel_atual):
 
     # Coletar respostas do usuário
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-        # Provide a fallback label if the question is empty
-        label = pergunta if pergunta else f"Pergunta {i + 1}"
-        
-        resposta = st.radio(label, opcoes, key=f"radio_{i}", label_visibility="hidden")
-    
+        resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
+
         # Verificar se a resposta é correta e atualizar a pontuação
         if resposta == respostas_corretas[i]:
             st.session_state['pontuacao'] += 1
-
-
 
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
@@ -331,6 +324,7 @@ def quiz_interativo_with_groq(nivel_atual):
         st.session_state['nivel'] = novo_nivel
         st.balloons()
         st.success(f"Você subiu para o Nível {novo_nivel}!")
+
 
 
 
