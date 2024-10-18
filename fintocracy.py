@@ -303,16 +303,16 @@ def quiz_interativo_with_groq(nivel_atual):
             resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith('>')), None)
             if resposta_correta:
                 respostas_corretas.append(resposta_correta)
-                
+
         print(respostas_corretas)
         # Adicione aqui o restante do seu código para interagir com o usuário
         pontuacao = 0
         for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-            resposta = st.radio(pergunta, opcoes)
-        
+            resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")  # Unique key added
+
         if st.button("Submeter Respostas"):
             for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-                resposta = st.radio(pergunta, opcoes)
+                resposta = st.radio(pergunta, opcoes, key=f"radio_submit_{i}")  # Unique key for submitting
                 if resposta == respostas_corretas[i]:
                     pontuacao += 1
             st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
@@ -320,9 +320,6 @@ def quiz_interativo_with_groq(nivel_atual):
             st.session_state['nivel'] = novo_nivel
             st.balloons()
             st.success(f"Você subiu para o Nível {novo_nivel}!")
-
-
-
 
 
 
