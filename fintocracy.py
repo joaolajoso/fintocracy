@@ -234,7 +234,7 @@ def generate_questions():
         "with the following content as a reference: \n\n"
         f"{markdown_content}\n"
         "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add > at beggining and < at end. "
-        "formatted as: 'Question | Option1, Option2, Option3, CorrectOption'."
+        "formatted as: '1. Question | Option1, Option2, Option3, Option4'."
     )
     
     try:
@@ -320,17 +320,17 @@ def quiz_interativo_with_groq(nivel_atual):
     # Recuperar perguntas e respostas corretas do session_state
     perguntas = st.session_state['perguntas']
     respostas_corretas = st.session_state['respostas_corretas']
-
-    # Coletar respostas do usuário
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
         resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
 
-        # Verificar se a resposta é correta e atualizar a pontuação
-        if resposta == respostas_corretas[i]:
-            st.session_state['pontuacao'] += 1
 
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
+            # Coletar respostas do usuário
+        for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+            # Verificar se a resposta é correta e atualizar a pontuação
+            if resposta == respostas_corretas[i]:
+                st.session_state['pontuacao'] += 1
         pontuacao = st.session_state['pontuacao']
         st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
         novo_nivel = atualizar_nivel(pontuacao)
