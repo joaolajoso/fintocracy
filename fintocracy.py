@@ -320,6 +320,7 @@ def quiz_interativo_with_groq(nivel_atual):
                     #or resposta_correta.endswith('<')
                     #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
                 resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith(' >')), None)
+                respostas_corretas.append(resposta_correta)
                 
  
         print(respostas_corretas)
