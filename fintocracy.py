@@ -315,9 +315,9 @@ def quiz_interativo_with_groq(nivel_atual):
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
         resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
         respostas.append(resposta.strip().lstrip('>'))
-        print(f"{respostas[i]} == {respostas_corretas[i]}")
-        if respostas[i] == respostas_corretas[i]:
-            st.session_state['pontuacao'] += 1
+        #print(f"{respostas[i]} == {respostas_corretas[i]}")
+        #if respostas[i] == respostas_corretas[i]:
+        #    st.session_state['pontuacao'] += 1
 
     print(respostas)
     # Exibir pontuação final e atualizar o nível
@@ -325,11 +325,11 @@ def quiz_interativo_with_groq(nivel_atual):
         # Coletar respostas do usuário
         # Adicione aqui o restante do seu código para interagir com o usuário
 
-        #for i, (pergunta, opcoes) in enumerate(perguntas.items()):
+        for i, (pergunta, opcoes) in enumerate(perguntas.items()):
             # Verificar se a resposta é correta e atualizar a pontuação
-        #    print(f"{respostas[i]} == {respostas_corretas[i]}")
-        #    if respostas[i] == respostas_corretas[i]:
-        #        st.session_state['pontuacao'] += 1
+            print(f"{respostas[i]} == {respostas_corretas[i]}")
+            if respostas[i] == respostas_corretas[i]:
+                st.session_state['pontuacao'] += 1
         pontuacao = st.session_state['pontuacao']
         st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
         novo_nivel = atualizar_nivel(pontuacao)
