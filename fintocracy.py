@@ -284,71 +284,40 @@ def generate_questions():
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
 
-    # Verificar se as perguntas já foram geradas
     if 'perguntas' not in st.session_state:
-        # Gerar perguntas dinamicamente usando a API Groq
         questions = generate_questions()
-        
+
         if not questions or isinstance(questions, str):
             st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
             return
 
-        # Dicionário para armazenar as perguntas e opções
         perguntas = {}
-        respostas_corretas = []  # Lista para armazenar as respostas corretas
+        respostas_corretas = []
 
-        # Iterar pelas perguntas geradas e exibi-las
-        #for index, question_data in enumerate(questions):
-        #    parts = question_data.split("|")
-        #    pergunta = parts[0].strip()
-        #    opcoes = parts[1].split(",")
-
-            # Adicionar pergunta e opções ao dicionário
-        #    perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
-            # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
-        #    respostas_corretas.append(opcoes[0].strip())
-        for index, question_data in enumerate(questions):
+        for question_data in questions:
             parts = question_data.split("|")
             pergunta = parts[0].strip()
             opcoes = parts[1].split(",")
 
-            # Adicionar pergunta e opções ao dicionário
             perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
-            
-            # Processar a resposta correta para remover os símbolos
-            resposta_correta = opcoes[0].strip()
-            if resposta_correta.startswith('>') :
-                #or resposta_correta.endswith('<')
-                #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
+            resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith('>')), None)
+            if resposta_correta:
                 respostas_corretas.append(resposta_correta)
- 
 
-        print(respostas_corretas)
-        # Armazenar as perguntas e respostas corretas no session_state
-        st.session_state['perguntas'] = perguntas
-        st.session_state['respostas_corretas'] = respostas_corretas
-        st.session_state['pontuacao'] = 0  # Reiniciar pontuação
-
-    # Recuperar perguntas e respostas corretas do session_state
-    perguntas = st.session_state['perguntas']
-    respostas_corretas = st.session_state['respostas_corretas']
-    for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-        resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
-
-
-    # Exibir pontuação final e atualizar o nível
-    if st.button("Submeter Respostas"):
-            # Coletar respostas do usuário
+        # Adicione aqui o restante do seu código para interagir com o usuário
+        pontuacao = 0
         for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-            # Verificar se a resposta é correta e atualizar a pontuação
+            resposta = st.radio(pergunta, opcoes)
             if resposta == respostas_corretas[i]:
-                st.session_state['pontuacao'] += 1
-        pontuacao = st.session_state['pontuacao']
-        st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
-        novo_nivel = atualizar_nivel(pontuacao)
-        st.session_state['nivel'] = novo_nivel
-        st.balloons()
-        st.success(f"Você subiu para o Nível {novo_nivel}!")
+                pontuacao += 1
+        
+        if st.button("Submeter Respostas"):
+            st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
+            novo_nivel = atualizar_nivel(pontuacao)
+            st.session_state['nivel'] = novo_nivel
+            st.balloons()
+            st.success(f"Você subiu para o Nível {novo_nivel}!")
+
 
 
 
