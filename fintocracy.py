@@ -263,7 +263,7 @@ def generate_questions():
     
     except Exception as e:
         print("Erro ao gerar perguntas:", str(e))
-        return "Não foi possível gerar perguntas no momento. Tente novamente mais tarde."
+        return "Não foi possível gerar perguntas no momento. Tente novamente mais tarde. Priemeira linha"
 
 
 
@@ -277,7 +277,6 @@ def quiz_interativo_with_groq(nivel_atual):
         questions = generate_questions()
         
         if not questions or isinstance(questions, str):
-            print(questions)
             st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
             return
 
@@ -305,8 +304,8 @@ def quiz_interativo_with_groq(nivel_atual):
             
             # Processar a resposta correta para remover os símbolos
             resposta_correta = opcoes[0].strip()
-            if resposta_correta.endswith('<'):
-                #resposta_correta.startswith('>') or 
+            if resposta_correta.startswith('>') or resposta_correta.endswith('<'):
+                #
                 #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
                 respostas_corretas.append(resposta_correta)
  
