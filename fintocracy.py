@@ -272,45 +272,56 @@ def generate_questions():
 def quiz_interativo_with_groq(nivel_atual):
     st.header("Quiz de Educação Financeira com Perguntas Geradas por Groq")
 
-    # Gerar perguntas dinamicamente usando a API Groq
-    questions = generate_questions()
+    # Verificar se as perguntas já foram geradas
+    if 'perguntas' not in st.session_state:
+        # Gerar perguntas dinamicamente usando a API Groq
+        questions = generate_questions()
 
-    if not questions or isinstance(questions, str):
-        st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
-        return
+        if not questions or isinstance(questions, str):
+            st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
+            return
 
-    # Dicionário para armazenar as perguntas e opções
-    perguntas = {}
-    respostas_corretas = []  # Lista para armazenar as respostas corretas
+        # Dicionário para armazenar as perguntas e opções
+        perguntas = {}
+        respostas_corretas = []  # Lista para armazenar as respostas corretas
 
-    # Iterar pelas perguntas geradas e exibi-las
-    for index, question_data in enumerate(questions):
-        parts = question_data.split("|")
-        pergunta = parts[0].strip()
-        opcoes = parts[1].split(",")
-        
-        # Adicionar pergunta e opções ao dicionário
-        perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
-        # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
-        respostas_corretas.append(opcoes[0].strip())  
+        # Iterar pelas perguntas geradas e exibi-las
+        for index, question_data in enumerate(questions):
+            parts = question_data.split("|")
+            pergunta = parts[0].strip()
+            opcoes = parts[1].split(",")
 
-        # Fornecer uma chave única usando o índice
-        resposta = st.radio(pergunta, perguntas[pergunta], key=f"radio_{index}")
+            # Adicionar pergunta e opções ao dicionário
+            perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
+            # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
+            respostas_corretas.append(opcoes[0].strip())
+
+        # Armazenar as perguntas e respostas corretas no session_state
+        st.session_state['perguntas'] = perguntas
+        st.session_state['respostas_corretas'] = respostas_corretas
+        st.session_state['pontuacao'] = 0  # Reiniciar pontuação
+
+    # Recuperar perguntas e respostas corretas do session_state
+    perguntas = st.session_state['perguntas']
+    respostas_corretas = st.session_state['respostas_corretas']
 
     # Coletar respostas do usuário
-    pontuacao = 0
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
-        resposta = st.session_state.get(f"radio_{i}")  # Recuperar a resposta escolhida
+        resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
+
+        # Verificar se a resposta é correta e atualizar a pontuação
         if resposta == respostas_corretas[i]:
-            pontuacao += 1
+            st.session_state['pontuacao'] += 1
 
     # Exibir pontuação final e atualizar o nível
     if st.button("Submeter Respostas"):
+        pontuacao = st.session_state['pontuacao']
         st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
         novo_nivel = atualizar_nivel(pontuacao)
         st.session_state['nivel'] = novo_nivel
         st.balloons()
         st.success(f"Você subiu para o Nível {novo_nivel}!")
+
 
 
 
