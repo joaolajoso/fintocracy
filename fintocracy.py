@@ -229,14 +229,6 @@ def generate_questions():
 
     client = Groq(api_key=api_key)
 
-    #prompt_pagination = (
-    #    "Generate multiple-choice questions about financial literacy, "
-    #    "with the following content as a reference: \n\n"
-    #    f"{markdown_content}\n"
-    #    "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add '>' at beggining with no space like '>Option3'. theres is no other special charecters or numbers."
-    #    "formatted as sample: 'Qual é a melhor maneira de evitar dívidas? | Gastar mais do que ganha, >Poupar dinheiro, Fazer empréstimos, Jantar fora'."
-    #)
-    #and < at end. 
     prompt_pagination = (
         "Gere perguntas de múltipla escolha sobre literacia financeira, "
         "usando o seguinte conteúdo como referência: \n\n"
@@ -260,7 +252,7 @@ def generate_questions():
         )
 
         response_content = response.choices[0].message.content.strip()
-        print(response_content)
+        #print(response_content)
         # Split the response into lines and validate
         questions = response_content.split("\n")
         formatted_questions = []
@@ -296,15 +288,7 @@ def quiz_interativo_with_groq(nivel_atual):
         # Dicionário para armazenar as perguntas e opções
         perguntas = {}
         respostas_corretas = []  # Lista para armazenar as respostas corretas
-        # Iterar pelas perguntas geradas e exibi-las
-        #for index, question_data in enumerate(questions):
-        #    parts = question_data.split("|")
-        #    pergunta = parts[0].strip()
-        #    opcoes = parts[1].split(",")
-            # Adicionar pergunta e opções ao dicionário
-        #    perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
-            # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
-        #    respostas_corretas.append(opcoes[0].strip())
+
         for index, question_data in enumerate(questions):
             respostas_corretas = []
             for question_data in questions:
@@ -314,16 +298,11 @@ def quiz_interativo_with_groq(nivel_atual):
                 # Adicionar pergunta e opções ao dicionário
                 perguntas[pergunta] = [opcao.strip() for opcao in opcoes]
                 
-                # Processar a resposta correta para remover os símbolos
-                #resposta_correta = opcoes[0].strip()
-                #if resposta_correta.startswith('>') :
-                    #or resposta_correta.endswith('<')
-                    #resposta_correta = resposta_correta[1:-1].strip()  # Remover os símbolos
                 resposta_correta = next((opcao.strip().lstrip('>') for opcao in opcoes if opcao.startswith(' >')), None)
                 respostas_corretas.append(resposta_correta)
                 
  
-        print(respostas_corretas)
+        #print(respostas_corretas)
         # Armazenar as perguntas e respostas corretas no session_state
         st.session_state['perguntas'] = perguntas
         st.session_state['respostas_corretas'] = respostas_corretas
@@ -341,7 +320,7 @@ def quiz_interativo_with_groq(nivel_atual):
         pontuacao = 0
         for i, (pergunta, opcoes) in enumerate(perguntas.items()):
             # Verificar se a resposta é correta e atualizar a pontuação
-            resposta = st.radio(pergunta, opcoes)
+            print(f"{resposta} == {respostas_corretas[i]}")
             if resposta == respostas_corretas[i]:
                 st.session_state['pontuacao'] += 1
         pontuacao = st.session_state['pontuacao']
