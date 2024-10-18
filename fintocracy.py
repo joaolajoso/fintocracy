@@ -247,7 +247,7 @@ def generate_questions():
         )
         
         response_content = response.choices[0].message.content.strip()
-
+        print(response_content)
         # Split the response into lines and validate
         questions = response_content.split("\n")
         formatted_questions = []
@@ -258,7 +258,7 @@ def generate_questions():
                 formatted_question = question.strip()
                 if formatted_question:  # Only add non-empty lines
                     formatted_questions.append(formatted_question)
-        print(formatted_questions)
+        
         return formatted_questions  # Return the formatted questions
     
     except Exception as e:
