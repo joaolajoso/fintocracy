@@ -233,7 +233,7 @@ def generate_questions():
         "Generate multiple-choice questions about financial literacy, "
         "with the following content as a reference: \n\n"
         f"{markdown_content}\n"
-        "Please provide 10 questions along with their options and the correct answers, in Portuguese of Portugal "
+        "Please provide 10 questions along with their options and the correct answers, language is Portuguese of Portugal. On the correct answer add > at beggining and < at end. "
         "formatted as: 'Question | Option1, Option2, Option3, CorrectOption'."
     )
     
@@ -284,7 +284,7 @@ def quiz_interativo_with_groq(nivel_atual):
         # Dicionário para armazenar as perguntas e opções
         perguntas = {}
         respostas_corretas = []  # Lista para armazenar as respostas corretas
-
+        
         # Iterar pelas perguntas geradas e exibi-las
         for index, question_data in enumerate(questions):
             parts = question_data.split("|")
