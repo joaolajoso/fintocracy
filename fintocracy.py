@@ -275,8 +275,9 @@ def quiz_interativo_with_groq(nivel_atual):
     if 'perguntas' not in st.session_state:
         # Gerar perguntas dinamicamente usando a API Groq
         questions = generate_questions()
-
+        
         if not questions or isinstance(questions, str):
+            print(questions)
             st.error("Não foi possível gerar perguntas no momento. Tente novamente mais tarde.")
             return
 
@@ -295,6 +296,7 @@ def quiz_interativo_with_groq(nivel_atual):
             # Supondo que a primeira opção é sempre a correta, ajuste conforme necessário
             respostas_corretas.append(opcoes[0].strip())
 
+        print(respostas_corretas)
         # Armazenar as perguntas e respostas corretas no session_state
         st.session_state['perguntas'] = perguntas
         st.session_state['respostas_corretas'] = respostas_corretas
