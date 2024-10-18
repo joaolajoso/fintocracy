@@ -309,9 +309,9 @@ def quiz_interativo_with_groq(nivel_atual):
         st.session_state['pontuacao'] = 0  # Reiniciar pontuação
     
         # Recuperar perguntas e respostas corretas do session_state
-        perguntas = st.session_state['perguntas']
-        respostas_corretas = st.session_state['respostas_corretas']
-        respostas = []
+    perguntas = st.session_state['perguntas']
+    respostas_corretas = st.session_state['respostas_corretas']
+    respostas = []
     for i, (pergunta, opcoes) in enumerate(perguntas.items()):
         resposta = st.radio(pergunta, opcoes, key=f"radio_{i}")
         respostas.append(resposta.strip().lstrip('>'))
