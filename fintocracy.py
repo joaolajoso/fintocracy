@@ -352,7 +352,7 @@ def quiz_interativo_with_groq(nivel_atual):
         st.session_state['nivel'] = novo_nivel
         st.balloons()
         st.success(f"Você subiu para o Nível {novo_nivel}!")
-            pontuacao += 1
+        pontuacao += 1
         
         if st.button("Submeter Respostas"):
             st.success(f"Você acertou {pontuacao} de {len(perguntas)} perguntas!")
