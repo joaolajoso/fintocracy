@@ -302,7 +302,7 @@ def quiz_interativo_with_groq(nivel_atual):
                 respostas_corretas.append(resposta_correta)
             
 
-    print(respostas_corretas)
+    #print(respostas_corretas)
     # Armazenar as perguntas e respostas corretas no session_state
     st.session_state['perguntas'] = perguntas
     st.session_state['respostas_corretas'] = respostas_corretas
